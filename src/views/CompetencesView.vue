@@ -1,9 +1,5 @@
-<script setup lang="ts">
-const a = 5
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <main>
-    <span class="wqewqew"> motto </span>
-  </main>
+  <main>dwie rzeczy są nieskończone - wszechświat i ludzka głupota</main>
 </template>
