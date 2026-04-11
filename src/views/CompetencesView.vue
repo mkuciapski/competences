@@ -1,10 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { competences } from '@/assets/competences'
 
 // #region LIST
 const _competences = ref(competences)
-
+const _filteredCompetences = computed(() => {
+  return _competences.value.filter((competence) => competence.Name.toLowerCase().includes(_searchText.value.toLowerCase()))
+})
+setTimeout(() => {
+  _competences.value.push({ Id: 11, Name: 'Bootstrap 4', Level: 4, Picture: 'bootstrap.svg', Description: 'Wersja 4' })
+}, 5000)
 //#endregion LIST
 
 // #region SEARCH
@@ -24,7 +29,7 @@ const _gapSize = ref('1rem')
     </div>
   </div>
   <div class="flex flex-wrap justify-center card-spacing">
-    <template v-for="competence in _competences" :key="competence.Id">
+    <template v-for="competence in _filteredCompetences" :key="competence.Id">
       <div v-if="competence.Level" class="card bg-base-100 w-48 shadow-sm">
         <h2 class="text-center text-xl uppercase">{{ competence.Name }}</h2>
         <img :src="`assets/${competence.Picture}`" />
