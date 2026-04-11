@@ -10,6 +10,10 @@ const _competences = ref(competences)
 // #region SEARCH
 const _searchText = ref('')
 //#endregion SEARCH
+
+// #region DISPLAY
+const _gapSize = ref('1rem')
+//#endregion DISPLAY
 </script>
 
 <template>
@@ -19,7 +23,7 @@ const _searchText = ref('')
       <input type="text" class="w-full!" v-model="_searchText" />
     </div>
   </div>
-  <div class="flex flex-wrap justify-center gap-3">
+  <div class="flex flex-wrap justify-center card-spacing">
     <template v-for="competence in _competences" :key="competence.Id">
       <div v-if="competence.Level" class="card bg-base-100 w-48 shadow-sm">
         <h2 class="text-center text-xl uppercase">{{ competence.Name }}</h2>
@@ -33,3 +37,8 @@ const _searchText = ref('')
     </template>
   </div>
 </template>
+<style scoped>
+.card-spacing {
+  gap: v-bind('_gapSize');
+}
+</style>
