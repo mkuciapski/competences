@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { users } from '@/assets/users'
 
 const _users = ref(users)
@@ -21,10 +21,31 @@ const _agedUsers = computed((previous) => {
   console.warn('previous aged users', previous)
   return _users.value.filter((user) => user.Age > 50)
 })
+
+const _showFlightPanel = ref(false)
+
+const _flight = ref({
+  City: '',
+  Tickets: 0,
+})
+
+watch(_showFlightPanel, (current, previous) => {
+  if (!previous && current) {
+    console.log(`${previous}:${current}`)
+    _flight.value = { City: '', Tickets: 0 }
+  }
+})
+
+watch(
+  () => _flight.value.Tickets,
+  (current, previous) => {
+    if (!current.Tickets) alert('Proszę wprowadzić liczbę biletów')
+  },
+)
 </script>
 
 <template>
-  <div>
+  <!-- <div>
     <h1>TEMP</h1>
     <p class="user-name">{{ _user.Name }}</p>
     <p v-html="_user.Name"></p>
@@ -37,6 +58,11 @@ const _agedUsers = computed((previous) => {
     <div style="margin-top: 20px">
       <input type="submit" />
     </div>
+  </div> -->
+  <input type="checkbox" v-model="_showFlightPanel" />
+  <div class="border-1 rounded-lg" v-show="_showFlightPanel">
+    <input placeholder="lokalizacja" v-model="_flight.City" />
+    <input min="0" step="1" v-model="_flight.Tickets" />
   </div>
 </template>
 <style scoped>
