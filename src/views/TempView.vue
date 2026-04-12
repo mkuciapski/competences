@@ -36,11 +36,17 @@ watch(_showFlightPanel, (current, previous) => {
   }
 })
 
+const _message = ref('')
 watch(
-  () => _flight.value.Tickets,
+  () => _flight.value,
   (current, previous) => {
-    if (!current.Tickets) alert('Proszę wprowadzić liczbę biletów')
+    const dangerousCities = ['Beirut', 'Sopot']
+
+    if (current.Tickets < 1) _message.value = 'Proszę prowadzić liczbę biletów'
+    else if (dangerousCities.includes(current.City)) _message.value = 'Nie jedź do tego miasta'
+    else _message.value = ''
   },
+  { deep: true, immediate: true },
 )
 </script>
 
@@ -63,6 +69,7 @@ watch(
   <div class="border-1 rounded-lg" v-show="_showFlightPanel">
     <input placeholder="lokalizacja" v-model="_flight.City" />
     <input min="0" step="1" v-model="_flight.Tickets" />
+    <p class="text-red-700">{{ _message }}</p>
   </div>
 </template>
 <style scoped>
