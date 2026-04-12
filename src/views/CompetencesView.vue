@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { competences } from '@/assets/competences'
 
 // #region LIST
@@ -18,7 +18,19 @@ const _searchText = ref('')
 
 // #region DISPLAY
 const _gapSize = ref('1rem')
+const _alert = ref('')
 //#endregion DISPLAY
+
+watch(
+  () => _competences.value,
+  () => {
+    _alert.value = 'Wykryto zmianę!!'
+    setTimeout(() => {
+      _alert.value = ''
+    }, 5000)
+  },
+  { deep: true },
+)
 </script>
 
 <template>
@@ -40,6 +52,11 @@ const _gapSize = ref('1rem')
         </div>
       </div>
     </template>
+  </div>
+  <div v-show="_alert" class="toast">
+    <div class="alert alert-info">
+      <span>{{ _alert }}</span>
+    </div>
   </div>
 </template>
 <style scoped>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, watchEffect } from 'vue'
 import { users } from '@/assets/users'
 
 const _users = ref(users)
@@ -37,7 +37,7 @@ watch(_showFlightPanel, (current, previous) => {
 })
 
 const _message = ref('')
-watch(
+/*watch(
   () => _flight.value,
   (current, previous) => {
     const dangerousCities = ['Beirut', 'Sopot']
@@ -47,7 +47,14 @@ watch(
     else _message.value = ''
   },
   { deep: true, immediate: true },
-)
+)*/
+watchEffect(() => {
+  const dangerousCities = ['Beirut', 'Sopot']
+
+  if (_flight.value.Tickets < 1) _message.value = 'Proszę prowadzić liczbę biletów'
+  else if (dangerousCities.includes(_flight.value.City)) _message.value = 'Nie jedź do tego miasta'
+  else _message.value = ''
+})
 </script>
 
 <template>
