@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, watchEffect } from 'vue'
 import { users } from '@/assets/users'
+import Flight from '@/components/Flight.vue'
 
 const _users = ref(users)
 const _user = ref({ Name: '<b>John Doe</b>', Age: 30 })
@@ -23,41 +24,11 @@ const _agedUsers = computed((previous) => {
 })
 
 const _showFlightPanel = ref(false)
-
-const _flight = ref({
-  City: '',
-  Tickets: 0,
-})
-
-watch(_showFlightPanel, (current, previous) => {
-  if (!previous && current) {
-    console.log(`${previous}:${current}`)
-    _flight.value = { City: '', Tickets: 0 }
-  }
-})
-
-const _message = ref('')
-/*watch(
-  () => _flight.value,
-  (current, previous) => {
-    const dangerousCities = ['Beirut', 'Sopot']
-
-    if (current.Tickets < 1) _message.value = 'Proszę prowadzić liczbę biletów'
-    else if (dangerousCities.includes(current.City)) _message.value = 'Nie jedź do tego miasta'
-    else _message.value = ''
-  },
-  { deep: true, immediate: true },
-)*/
-watchEffect(() => {
-  const dangerousCities = ['Beirut', 'Sopot']
-
-  if (_flight.value.Tickets < 1) _message.value = 'Proszę prowadzić liczbę biletów'
-  else if (dangerousCities.includes(_flight.value.City)) _message.value = 'Nie jedź do tego miasta'
-  else _message.value = ''
-})
 </script>
 
 <template>
+  <input type="checkbox" v-model="_showFlightPanel" />
+  <Flight v-for="n in 3" :key="n" class="my-2" v-show="_showFlightPanel" :default-ticket-number="2" :visible="_showFlightPanel" />
   <!-- <div>
     <h1>TEMP</h1>
     <p class="user-name">{{ _user.Name }}</p>
@@ -72,12 +43,6 @@ watchEffect(() => {
       <input type="submit" />
     </div>
   </div> -->
-  <input type="checkbox" v-model="_showFlightPanel" />
-  <div class="border-1 rounded-lg" v-show="_showFlightPanel">
-    <input placeholder="lokalizacja" v-model="_flight.City" />
-    <input min="0" step="1" v-model="_flight.Tickets" />
-    <p class="text-red-700">{{ _message }}</p>
-  </div>
 </template>
 <style scoped>
 .user-name {
